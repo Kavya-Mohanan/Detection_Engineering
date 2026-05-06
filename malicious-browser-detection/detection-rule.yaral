@@ -1,0 +1,22 @@
+// Malicious Browser Installation Detection
+// Platform: Google Chronicle (YARA-L)
+// MITRE ATT&CK: T1176 - Browser Extensions
+// Author: Kavya Mohanan
+rule malicious_browser_detection {
+ meta:
+   author = "Kavya Mohanan"
+   description = "Detects browser process executions from
+                  non-standard installation paths"
+   mitre_attack = "T1176"
+   severity = "MEDIUM"
+   created = "2026"
+ events:
+   $process.metadata.event_type = "PROCESS_LAUNCH"
+   $process.target.process.file.full_path = /chrome\.exe|firefox\.exe|edge\.exe/i
+   $process.target.process.file.full_path != /Program Files/i
+   $process.target.process.file.full_path != /Program Files \(x86\)/i
+ match:
+   $process.principal.hostname over 5m
+ condition:
+   $process
+}
