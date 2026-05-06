@@ -1,0 +1,21 @@
+// Ransomware Early Stage Detection
+// Platform: Google Chronicle (YARA-L)
+// MITRE ATT&CK: T1486 - Data Encrypted for Impact
+// Author: Kavya Mohanan
+rule ransomware_early_stage_detection {
+ meta:
+   author = "Kavya Mohanan"
+   description = "Detects early-stage ransomware activity via mass file rename events"
+   mitre_attack = "T1486"
+   severity = "HIGH"
+   created = "2024"
+ events:
+   $rename.metadata.event_type = "FILE_RENAME"
+   $rename.metadata.event_type = "FILE_MOVE"
+   $rename.target.file.full_path = /\.(encrypted|locked|crypto|enc|crypted|pay2decrypt)$/
+   $rename.principal.process.file.full_path != /backup|veeam|acronis/i
+ match:
+   $rename.principal.hostname over 60s
+ condition:
+   #rename > 100
+}
