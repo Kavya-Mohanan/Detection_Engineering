@@ -8,7 +8,7 @@ rule ransomware_early_stage_detection {
    description = "Detects early-stage ransomware activity via mass file rename events"
    mitre_attack = "T1486"
    severity = "HIGH"
-   created = "2024"
+   created = "2026"
  events:
    $rename.metadata.event_type = "FILE_RENAME"
    $rename.metadata.event_type = "FILE_MOVE"
